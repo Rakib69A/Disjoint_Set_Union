@@ -3,10 +3,12 @@ using namespace std;
 const int N = 1e5+5;
 int parent[N];
 int group_size[N];
+int level[N];
 void dsu_initialization(int n){
     for(int i=0;i<n;i++){
         parent[i] = -1;
         group_size[i] = 1;
+        level[i] = 0;
     }
 }
 int dsu_find(int node){
@@ -31,6 +33,19 @@ void dsu_union_by_size(int node1, int node2){
     else{
         parent[leaderA] = leaderB;
         group_size[leaderB]+=group_size[leaderA];
+    }
+}
+void dsu_union(int node1, int node2){
+    int leaderA = dsu_find(node1);
+    int leaderB = dsu_find(node2);
+    if(level[leaderA] > level[leaderB]){
+        parent[leaderB] = leaderA;
+    }
+    else if(level[leaderA] < level[leaderB]){
+        parent[leaderA] = leaderB;
+    }else{
+        parent[leaderA] = leaderB;
+        level[leaderB]++;
     }
 }
 int main()
